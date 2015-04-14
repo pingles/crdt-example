@@ -12,11 +12,13 @@ func main() {
   var join string
   var port int
   var name string
+  var http string
   
   hostname, _ := os.Hostname()
   
   flag.StringVar(&name, "name", hostname, "name of node, must be unique")
   flag.StringVar(&join, "join", "", "address of other node to join")
+  flag.StringVar(&http, "http", ":8080", "http binding")
   flag.IntVar(&port, "listen", 7946, "listen port")
   flag.Parse()
 
@@ -46,6 +48,5 @@ func main() {
     log.Printf("member %s: %s:%d\n", member.Name, member.Addr, member.Port)
   }
   
-  stop := make(chan bool)
-  <-stop
+  ServeCounter(counter, http)
 }
