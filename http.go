@@ -19,6 +19,10 @@ func ServeCounter(counter *crdt.Counter, httpBinding string) {
     counter.Increment()
     writeCounter(counter, w)
   })
+  http.HandleFunc("/dec", func(w http.ResponseWriter, r *http.Request) {
+    counter.Decrement()
+    writeCounter(counter, w)
+  })
   
   log.Println("http listening", httpBinding)
   http.ListenAndServe(httpBinding, nil)
