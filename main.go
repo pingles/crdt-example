@@ -4,6 +4,7 @@ import (
   "flag"
   "log"
   "github.com/hashicorp/memberlist"
+  crdt "github.com/pingles/crdt-go"
   "os"
 )
 
@@ -19,7 +20,11 @@ func main() {
   flag.IntVar(&port, "listen", 7946, "listen port")
   flag.Parse()
 
+  counter := crdt.NewCounter(name)
+  gossiper := NewMemberlistGossiper(name, counter)
+
   config := memberlist.DefaultLocalConfig()
+  config.Delegate = gossiper
   config.BindPort = port
   config.Name = name
   list, err := memberlist.Create(config)
